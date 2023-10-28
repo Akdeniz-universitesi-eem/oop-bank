@@ -40,8 +40,30 @@ package com.oopbank;
 *  Bu sayede alt sınıf ata sınıfından gelen davranışı kendine göre şekillendirebilir.
 */
 
+import com.oopbank.atm.ATM;
+import com.oopbank.customer.Customer;
+import com.oopbank.employee.Employee;
+import com.oopbank.generic.money.Money;
+import com.oopbank.person.Person;
+import com.oopbank.generic.money.Currency;
+
+import java.util.Locale;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+
+        ATM atm = ATM.builder().id("123").location("antalya").moneyInATM(new Money(10000.0, Currency.TRY)).build();
+
+        Customer customer = new Customer();
+
+        customer.setId("1234");
+        customer.setEmail("382476@gmail.com");
+        customer.setFullname("mert d");
+        customer.setDepositedMoney(new Money(1000.0, Currency.TRY));
+
+        System.out.println("Bakiye : " + customer.getDepositedMoney().getAmount());
+        atm.withdrawMoney(customer, 500.0);
+        System.out.println("Para çekildi : " + customer.getDepositedMoney().getAmount());
+
     }
 }
