@@ -70,7 +70,21 @@ public class Main {
         printOut(ATM.class);
         printOut(BankOffice.class);
 
+        ATM atmInDB = atms.get(0);
+        Customer customerInDB = customers.get(0);
+        Double amountToWithdraw = 200.0;
+        Double amountToDeposit = 1200.0;
+
+        System.out.println("ATM BAKIYE : " + atmInDB.getMoneyInATM().getAmount());
+        System.out.println("MUSTERI BAKIYE : " + customerInDB.getDepositedMoney().getAmount());
+        atmInDB.withdrawMoney(customerInDB, amountToWithdraw);
+        System.out.println("ATM BAKIYE : " + atmInDB.getMoneyInATM().getAmount());
+        System.out.println("MUSTERI BAKIYE : " + customerInDB.getDepositedMoney().getAmount());
+        atmInDB.depositMoney(customerInDB, amountToDeposit);
+        System.out.println("ATM BAKIYE : " + atmInDB.getMoneyInATM().getAmount());
+        System.out.println("MUSTERI BAKIYE : " + customerInDB.getDepositedMoney().getAmount());
     }
+
     private static void init(){
         DB db = DB.getInstance();
         customers = db.getTable(Customer.class).getRows().stream().toList();
@@ -88,9 +102,8 @@ public class Main {
             printOutATMs();
         } else if (clazz.equals(BankOffice.class)) {
             printOutBankOffices();
-        }
-        else{
-            System.out.println("No Such Table To Print!");
+        } else {
+            System.out.println("Method not implemented");
         }
     }
 
