@@ -1,7 +1,9 @@
 package com.oopbank.customer;
 
+import com.oopbank.employee.Employee;
 import com.oopbank.generic.money.Money;
 import com.oopbank.person.Person;
+import com.oopbank.utils.factory.IDBObject;
 import lombok.*;
 
 @Getter
@@ -9,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Customer extends Person {
+public class Customer extends Person implements IDBObject {
 
     private Money depositedMoney;
 
@@ -18,5 +20,6 @@ public class Customer extends Person {
         Double tempbalance = depositedMoney.getAmount();
         depositedMoney.setAmount(tempbalance + 1000);
     }
+
 
 }

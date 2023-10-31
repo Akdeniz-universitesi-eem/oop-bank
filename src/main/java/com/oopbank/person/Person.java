@@ -1,29 +1,22 @@
 package com.oopbank.person;
 
+import com.oopbank.employee.Employee;
 import lombok.*;
 
 @Getter
 @Setter
 public abstract class Person {
 
-    private String id;
+    public String id;
 
-    private String fullname;
+    public String fullname;
 
-    private String email;
+    public String email;
 
-    protected void getPromotion(){
+    public void getPromotion(){
 
     }
 
-    /*
-      public String getId(){
-        return this.id;
-    }
 
-    public void setId(String id){
-        this.id = id;
-    }
-    */
 
 }

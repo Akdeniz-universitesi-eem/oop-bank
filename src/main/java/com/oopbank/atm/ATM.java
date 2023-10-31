@@ -2,16 +2,15 @@ package com.oopbank.atm;
 
 import com.oopbank.customer.Customer;
 import com.oopbank.generic.money.Money;
+import com.oopbank.utils.factory.IDBObject;
 import lombok.*;
-
-import java.util.Currency;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ATM implements IMoneyDrawable {
+public class ATM implements IMoneyDrawable, IDBObject {
 
     private static Double LIMITS_OF_ATM = 20000.0;
 

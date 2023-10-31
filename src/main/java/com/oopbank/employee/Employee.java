@@ -1,6 +1,8 @@
 package com.oopbank.employee;
 
+import com.oopbank.generic.money.Money;
 import com.oopbank.person.Person;
+import com.oopbank.utils.factory.IDBObject;
 import lombok.*;
 
 @Getter
@@ -8,9 +10,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Employee extends Person {
+public class Employee extends Person implements IDBObject {
 
     private Job job;
+
+    private Money salary;
 
     @Override
     public void getPromotion(){
@@ -18,4 +22,8 @@ public class Employee extends Person {
             job = Job.MANAGER;
         }
     }
+
+
+
+
 }
