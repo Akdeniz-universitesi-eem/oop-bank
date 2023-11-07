@@ -16,14 +16,4 @@ public class Employee extends Person implements IDBObject {
 
     private Money salary;
 
-    @Override
-    public void getPromotion(){
-        if(job == Job.STANDARTWORKER){
-            job = Job.MANAGER;
-        }
-    }
-
-
-
-
 }

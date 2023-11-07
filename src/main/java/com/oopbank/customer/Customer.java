@@ -1,5 +1,7 @@
 package com.oopbank.customer;
 
+import com.oopbank.account.BankAccount;
+import com.oopbank.card.BankCard;
 import com.oopbank.employee.Employee;
 import com.oopbank.generic.money.Money;
 import com.oopbank.person.Person;
@@ -15,11 +17,7 @@ public class Customer extends Person implements IDBObject {
 
     private Money depositedMoney;
 
-    @Override
-    public void getPromotion(){
-        Double tempbalance = depositedMoney.getAmount();
-        depositedMoney.setAmount(tempbalance + 1000);
-    }
+    private BankAccount bankAccount;
 
-
+    private BankCard bankCard;
 }

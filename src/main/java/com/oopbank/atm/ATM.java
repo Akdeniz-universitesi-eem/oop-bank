@@ -2,8 +2,13 @@ package com.oopbank.atm;
 
 import com.oopbank.customer.Customer;
 import com.oopbank.generic.money.Money;
+import com.oopbank.service.money.IMoneyDrawable;
+import com.oopbank.service.money.MoneyOperationsService;
 import com.oopbank.utils.factory.IDBObject;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.Scanner;
 
 @Setter
 @Getter
@@ -12,40 +17,83 @@ import lombok.*;
 @Builder
 public class ATM implements IMoneyDrawable, IDBObject {
 
-    private static Double LIMITS_OF_ATM = 20000.0;
-
     private String id;
 
     private String location;
 
     private Money moneyInATM;
 
-    @Override
-    public void withdrawMoney(Customer customer,Double amounttowithdraw){
-        if(amounttowithdraw > moneyInATM.getAmount()){
-            System.out.println("ATM BAKIYESI YETERSIZ");
-        }
-        Double newCustomerBalance = customer.getDepositedMoney().getAmount() + amounttowithdraw;
-        customer.setDepositedMoney(new Money(newCustomerBalance, customer.getDepositedMoney().getCurrency()));
+    private Customer customerInUse;
 
-        Double newATMBalance = moneyInATM.getAmount() - amounttowithdraw;
-        this.setMoneyInATM(new Money(newATMBalance, moneyInATM.getCurrency()));
+
+    public void atmApp(Customer customer){
+        this.customerInUse = customer;
+        printMenu();
     }
 
-    //TODO: deposit money methodunu yazınız
+    private void atmOperation(ATMOperations operation, Double amount){
+        if(operation == operation.ACCOUNTINFO){
+            printAccountBalance(customerInUse);
+        }else if(operation == operation.WITHDRAW){
+            withdrawMoney(customerInUse, amount);
+        } else if (operation == ATMOperations.DEPOSIT) {
+            depositMoney(customerInUse, amount);
+        }
+    }
+
+    private void printMenu(){
+        Scanner kb = new Scanner(System.in);
+
+        while (true){
+            System.out.println("ATM " + this.getId()
+                    + "     KONUM : " + this.getLocation());
+
+            System.out.println("1) Bakiye Sorgulama\n" +
+                    "2)Para Çekme\n" +
+                    "3)Para Yatırma\n" +
+                    "4)Çıkış");
+
+            int userOperationInput = Integer.parseInt(kb.nextLine());
+
+            //INFO
+            if(userOperationInput == 1){
+                atmOperation(ATMOperations.ACCOUNTINFO, null);
+            }
+            //WITHDRAW FROM ATM
+            else if (userOperationInput == 2) {
+                System.out.println(
+                        "Bakiyeniz : " + customerInUse.getDepositedMoney().getAmount() + customerInUse.getDepositedMoney().getCurrency()
+                        + "\nTutar giriniz : " );
+                Double amount = Double.parseDouble(kb.nextLine());
+                atmOperation(ATMOperations.WITHDRAW, amount);
+            }
+            //DEPOSIT TO ATM
+            else if (userOperationInput == 3) {
+                System.out.println(
+                        "Bakiyeniz : " + customerInUse.getDepositedMoney().getAmount() + customerInUse.getDepositedMoney().getCurrency()
+                        + "\nTutar giriniz : " );
+                Double amount = Double.parseDouble(kb.nextLine());
+                atmOperation(ATMOperations.DEPOSIT, amount);
+            }
+            //EXIT
+            else {
+                return;
+            }
+        }
+    }
+
+    private void printAccountBalance(Customer customer){
+        System.out.println("Merhaba, " + customer.getFullname()
+                        + "     Bakiyeniz : " + customer.getDepositedMoney().getAmount() + customer.getDepositedMoney().getCurrency());
+    }
+
+    @Override
+    public void withdrawMoney(Customer customer, Double amountOfMoneyToWithdraw) {
+        MoneyOperationsService.withdrawMoney(this, customer, amountOfMoneyToWithdraw);
+    }
+
     @Override
     public void depositMoney(Customer customer, Double amountOfMoneyToDeposit) {
-        if(amountOfMoneyToDeposit < customer.getDepositedMoney().getAmount()){
-            System.out.println("KULLANICI BAKIYESI YETERSIZ");
-            return;
-        }
-        Double newCustomerBalance = customer.getDepositedMoney().getAmount() - amountOfMoneyToDeposit;
-        customer.setDepositedMoney(new Money(newCustomerBalance, customer.getDepositedMoney().getCurrency()));
-
-        Double newATMBalance = moneyInATM.getAmount() + amountOfMoneyToDeposit;
-        this.setMoneyInATM(new Money(newATMBalance, moneyInATM.getCurrency()));
+        MoneyOperationsService.depositMoney(this, customer, amountOfMoneyToDeposit);
     }
-
-
-
 }
